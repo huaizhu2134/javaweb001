@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.oracle01.mapper.StaffMapper">
+
+    <resultMap id="BaseResultMap" type="org.example.oracle01.model.Staff">
+        <id column="STAFF_ID" property="staffId" jdbcType="NUMERIC"/>
+        <result column="STAFF_NAME" property="staffName" jdbcType="VARCHAR"/>
+        <result column="REAL_NAME" property="realName" jdbcType="VARCHAR"/>
+        <result column="GENDER" property="gender" jdbcType="CHAR"/>
+        <result column="AGE" property="age" jdbcType="NUMERIC"/>
+        <result column="PHONE" property="phone" jdbcType="VARCHAR"/>
+        <result column="EMAIL" property="email" jdbcType="VARCHAR"/>
+        <result column="AVATAR_URL" property="avatarUrl" jdbcType="VARCHAR"/>
+        <result column="SKILL_LEVEL" property="skillLevel" jdbcType="VARCHAR"/>
+        <result column="SERVICE_TYPE" property="serviceType" jdbcType="VARCHAR"/>
+        <result column="UNIT_PRICE" property="unitPrice" jdbcType="DECIMAL"/>
+        <result column="STATUS" property="status" jdbcType="VARCHAR"/>
+        <result column="TOTAL_ORDERS" property="totalOrders" jdbcType="NUMERIC"/>
+        <result column="TOTAL_INCOME" property="totalIncome" jdbcType="DECIMAL"/>
+        <result column="AVG_SCORE" property="avgScore" jdbcType="DECIMAL"/>
+        <result column="CERT_STATUS" property="certStatus" jdbcType="VARCHAR"/>
+        <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="LAST_LOGIN_TIME" property="lastLoginTime" jdbcType="TIMESTAMP"/>
+        <result column="IS_DELETED" property="isDeleted" jdbcType="CHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        STAFF_ID, STAFF_NAME, REAL_NAME, GENDER, AGE, PHONE, EMAIL, AVATAR_URL, 
+        SKILL_LEVEL, SERVICE_TYPE, UNIT_PRICE, STATUS, TOTAL_ORDERS, TOTAL_INCOME, 
+        AVG_SCORE, CERT_STATUS, CREATE_TIME, UPDATE_TIME, LAST_LOGIN_TIME, IS_DELETED
+    </sql>
+
+    <select id="selectStaffList" parameterType="map" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM TB_STAFF
+        WHERE IS_DELETED = 'N'
+        <if test="params.staffName != null and params.staffName != ''">
+            AND STAFF_NAME LIKE CONCAT('%', #{params.staffName}, '%')
+        </if>
+        <if test="params.status != null and params.status != ''">
+            AND STATUS = #{params.status}
+        </if>
+        ORDER BY CREATE_TIME DESC
+        <if test="params.page != null and params.size != null">
+            OFFSET #{params.page} ROWS
+            FETCH NEXT #{params.size} ROWS ONLY
+        </if>
+    </select>
+
+    <select id="selectStaffById" parameterType="long" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM TB_STAFF
+        WHERE STAFF_ID = #{id} AND IS_DELETED = 'N'
+    </select>
+
+    <insert id="insertStaff" parameterType="org.example.oracle01.model.Staff">
+        INSERT INTO TB_STAFF (
+            STAFF_ID, STAFF_NAME, REAL_NAME, GENDER, AGE, PHONE, EMAIL, 
+            AVATAR_URL, SKILL_LEVEL, SERVICE_TYPE, UNIT_PRICE, STATUS, 
+            TOTAL_ORDERS, TOTAL_INCOME, AVG_SCORE, CERT_STATUS, CREATE_TIME, 
+            UPDATE_TIME, LAST_LOGIN_TIME, IS_DELETED
+        ) VALUES (
+            SEQ_STAFF_ID.NEXTVAL, #{staffName}, #{realName}, #{gender}, #{age}, 
+            #{phone}, #{email}, #{avatarUrl}, #{skillLevel}, #{serviceType}, 
+            #{unitPrice}, #{status}, #{totalOrders}, #{totalIncome}, 
+            #{avgScore}, #{certStatus}, SYSDATE, SYSDATE, #{lastLoginTime}, 'N'
+        )
+    </insert>
+
+    <update id="updateStaff" parameterType="org.example.oracle01.model.Staff">
+        UPDATE TB_STAFF
+        <set>
+            <if test="staffName != null">STAFF_NAME = #{staffName},</if>
+            <if test="realName != null">REAL_NAME = #{realName},</if>
+            <if test="gender != null">GENDER = #{gender},</if>
+            <if test="age != null">AGE = #{age},</if>
+            <if test="phone != null">PHONE = #{phone},</if>
+            <if test="email != null">EMAIL = #{email},</if>
+            <if test="avatarUrl != null">AVATAR_URL = #{avatarUrl},</if>
+            <if test="skillLevel != null">SKILL_LEVEL = #{skillLevel},</if>
+            <if test="serviceType != null">SERVICE_TYPE = #{serviceType},</if>
+            <if test="unitPrice != null">UNIT_PRICE = #{unitPrice},</if>
+            <if test="status != null">STATUS = #{status},</if>
+            <if test="totalOrders != null">TOTAL_ORDERS = #{totalOrders},</if>
+            <if test="totalIncome != null">TOTAL_INCOME = #{totalIncome},</if>
+            <if test="avgScore != null">AVG_SCORE = #{avgScore},</if>
+            <if test="certStatus != null">CERT_STATUS = #{certStatus},</if>
+            <if test="lastLoginTime != null">LAST_LOGIN_TIME = #{lastLoginTime},</if>
+            UPDATE_TIME = SYSDATE,
+        </set>
+        WHERE STAFF_ID = #{staffId} AND IS_DELETED = 'N'
+    </update>
+
+    <update id="deleteStaff" parameterType="long">
+        UPDATE TB_STAFF
+        SET IS_DELETED = 'Y', UPDATE_TIME = SYSDATE
+        WHERE STAFF_ID = #{id}
+    </update>
+
+    <select id="countStaff" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM TB_STAFF
+        WHERE IS_DELETED = 'N'
+        <if test="params.staffName != null and params.staffName != ''">
+            AND STAFF_NAME LIKE CONCAT('%', #{params.staffName}, '%')
+        </if>
+        <if test="params.status != null and params.status != ''">
+            AND STATUS = #{params.status}
+        </if>
+    </select>
+</mapper>

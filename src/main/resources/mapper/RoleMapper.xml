@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.oracle01.mapper.RoleMapper">
+
+    <resultMap id="BaseResultMap" type="org.example.oracle01.model.Role">
+        <id column="ROLE_ID" property="roleId" jdbcType="NUMERIC"/>
+        <result column="ROLE_NAME" property="roleName" jdbcType="VARCHAR"/>
+        <result column="ROLE_DESC" property="roleDesc" jdbcType="VARCHAR"/>
+        <result column="PERMISSIONS" property="permissions" jdbcType="VARCHAR"/>
+        <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="IS_DELETED" property="isDeleted" jdbcType="CHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        ROLE_ID, ROLE_NAME, ROLE_DESC, PERMISSIONS, CREATE_TIME, UPDATE_TIME, IS_DELETED
+    </sql>
+
+    <select id="selectRoleList" parameterType="map" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM TB_ROLE
+        WHERE IS_DELETED = 'N'
+        <if test="params.roleName != null and params.roleName != ''">
+            AND ROLE_NAME LIKE CONCAT('%', #{params.roleName}, '%')
+        </if>
+        ORDER BY CREATE_TIME DESC
+        <if test="params.page != null and params.size != null">
+            OFFSET #{params.page} ROWS
+            FETCH NEXT #{params.size} ROWS ONLY
+        </if>
+    </select>
+
+    <select id="selectRoleById" parameterType="long" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM TB_ROLE
+        WHERE ROLE_ID = #{id} AND IS_DELETED = 'N'
+    </select>
+
+    <insert id="insertRole" parameterType="org.example.oracle01.model.Role">
+        INSERT INTO TB_ROLE (
+            ROLE_ID, ROLE_NAME, ROLE_DESC, PERMISSIONS, 
+            CREATE_TIME, UPDATE_TIME, IS_DELETED
+        ) VALUES (
+            SEQ_ROLE_ID.NEXTVAL, #{roleName}, #{roleDesc}, #{permissions}, 
+            SYSDATE, SYSDATE, 'N'
+        )
+    </insert>
+
+    <update id="updateRole" parameterType="org.example.oracle01.model.Role">
+        UPDATE TB_ROLE
+        <set>
+            <if test="roleName != null">ROLE_NAME = #{roleName},</if>
+            <if test="roleDesc != null">ROLE_DESC = #{roleDesc},</if>
+            <if test="permissions != null">PERMISSIONS = #{permissions},</if>
+            UPDATE_TIME = SYSDATE,
+        </set>
+        WHERE ROLE_ID = #{roleId} AND IS_DELETED = 'N'
+    </update>
+
+    <update id="deleteRole" parameterType="long">
+        UPDATE TB_ROLE
+        SET IS_DELETED = 'Y', UPDATE_TIME = SYSDATE
+        WHERE ROLE_ID = #{id}
+    </update>
+
+    <select id="countRole" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM TB_ROLE
+        WHERE IS_DELETED = 'N'
+        <if test="params.roleName != null and params.roleName != ''">
+            AND ROLE_NAME LIKE CONCAT('%', #{params.roleName}, '%')
+        </if>
+    </select>
+</mapper>

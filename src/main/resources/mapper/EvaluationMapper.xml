@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.oracle01.mapper.EvaluationMapper">
+
+    <resultMap id="BaseResultMap" type="org.example.oracle01.model.Evaluation">
+        <id column="EVAL_ID" property="evalId" jdbcType="NUMERIC"/>
+        <result column="ORDER_ID" property="orderId" jdbcType="NUMERIC"/>
+        <result column="CUSTOMER_ID" property="customerId" jdbcType="NUMERIC"/>
+        <result column="STAFF_ID" property="staffId" jdbcType="NUMERIC"/>
+        <result column="SCORE" property="score" jdbcType="NUMERIC"/>
+        <result column="CONTENT" property="content" jdbcType="VARCHAR"/>
+        <result column="TAGS" property="tags" jdbcType="VARCHAR"/>
+        <result column="IS_ANONYMOUS" property="isAnonymous" jdbcType="CHAR"/>
+        <result column="STAFF_REPLY" property="staffReply" jdbcType="VARCHAR"/>
+        <result column="REPLY_TIME" property="replyTime" jdbcType="TIMESTAMP"/>
+        <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="IS_DELETED" property="isDeleted" jdbcType="CHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        EVAL_ID, ORDER_ID, CUSTOMER_ID, STAFF_ID, SCORE, CONTENT, 
+        TAGS, IS_ANONYMOUS, STAFF_REPLY, REPLY_TIME, CREATE_TIME, IS_DELETED
+    </sql>
+
+    <select id="selectEvaluationList" parameterType="map" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM TB_EVALUATION
+        WHERE IS_DELETED = 'N'
+        <if test="params.orderId != null">
+            AND ORDER_ID = #{params.orderId}
+        </if>
+        <if test="params.customerId != null">
+            AND CUSTOMER_ID = #{params.customerId}
+        </if>
+        <if test="params.staffId != null">
+            AND STAFF_ID = #{params.staffId}
+        </if>
+        <if test="params.score != null">
+            AND SCORE = #{params.score}
+        </if>
+        ORDER BY CREATE_TIME DESC
+        <if test="params.page != null and params.size != null">
+            OFFSET #{params.page} ROWS
+            FETCH NEXT #{params.size} ROWS ONLY
+        </if>
+    </select>
+
+    <select id="selectEvaluationById" parameterType="long" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM TB_EVALUATION
+        WHERE EVAL_ID = #{id} AND IS_DELETED = 'N'
+    </select>
+
+    <insert id="insertEvaluation" parameterType="org.example.oracle01.model.Evaluation">
+        INSERT INTO TB_EVALUATION (
+            EVAL_ID, ORDER_ID, CUSTOMER_ID, STAFF_ID, SCORE, CONTENT, 
+            TAGS, IS_ANONYMOUS, STAFF_REPLY, REPLY_TIME, CREATE_TIME, IS_DELETED
+        ) VALUES (
+            SEQ_EVAL_ID.NEXTVAL, #{orderId}, #{customerId}, #{staffId}, 
+            #{score}, #{content}, #{tags}, #{isAnonymous}, #{staffReply}, 
+            #{replyTime}, SYSDATE, 'N'
+        )
+    </insert>
+
+    <update id="updateEvaluation" parameterType="org.example.oracle01.model.Evaluation">
+        UPDATE TB_EVALUATION
+        <set>
+            <if test="orderId != null">ORDER_ID = #{orderId},</if>
+            <if test="customerId != null">CUSTOMER_ID = #{customerId},</if>
+            <if test="staffId != null">STAFF_ID = #{staffId},</if>
+            <if test="score != null">SCORE = #{score},</if>
+            <if test="content != null">CONTENT = #{content},</if>
+            <if test="tags != null">TAGS = #{tags},</if>
+            <if test="isAnonymous != null">IS_ANONYMOUS = #{isAnonymous},</if>
+            <if test="staffReply != null">STAFF_REPLY = #{staffReply},</if>
+            <if test="replyTime != null">REPLY_TIME = #{replyTime},</if>
+        </set>
+        WHERE EVAL_ID = #{evalId} AND IS_DELETED = 'N'
+    </update>
+
+    <update id="deleteEvaluation" parameterType="long">
+        UPDATE TB_EVALUATION
+        SET IS_DELETED = 'Y'
+        WHERE EVAL_ID = #{id}
+    </update>
+
+    <select id="countEvaluation" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM TB_EVALUATION
+        WHERE IS_DELETED = 'N'
+        <if test="params.orderId != null">
+            AND ORDER_ID = #{params.orderId}
+        </if>
+        <if test="params.customerId != null">
+            AND CUSTOMER_ID = #{params.customerId}
+        </if>
+        <if test="params.staffId != null">
+            AND STAFF_ID = #{params.staffId}
+        </if>
+        <if test="params.score != null">
+            AND SCORE = #{params.score}
+        </if>
+    </select>
+</mapper>

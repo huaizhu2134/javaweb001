@@ -1,0 +1,256 @@
+/* 企业级管理系统配色方案 */
+:root {
+  /* 主色调 - 企业蓝 */
+  --primary-color: #1890ff;
+  --primary-color-light: #40a9ff;
+  --primary-color-dark: #096dd9;
+  
+  /* 辅助色彩 */
+  --secondary-color: #52c41a;
+  --warning-color: #faad14;
+  --error-color: #f5222d;
+  --info-color: #177ddc;
+  
+  /* 灰度色彩 */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-gray-1: #fafafa;
+  --color-gray-2: #f5f5f5;
+  --color-gray-3: #f0f0f0;
+  --color-gray-4: #d9d9d9;
+  --color-gray-5: #bfbfbf;
+  --color-gray-6: #8c8c8c;
+  --color-gray-7: #595959;
+  --color-gray-8: #262626;
+  --color-gray-9: #1f1f1f;
+  
+  /* 背景色 */
+  --bg-color-page: #f0f2f5;
+  --bg-color-container: #ffffff;
+  --bg-color-header: linear-gradient(135deg, #1890ff, #096dd9);
+  --bg-color-sidebar: #001529;
+  --bg-color-sidebar-item: #000c17;
+  --bg-color-hover: #f5f5f5;
+  
+  /* 边框色 */
+  --border-color: #d9d9d9;
+  --border-color-light: #e8e8e8;
+  --border-color-dark: #bfbfbf;
+  
+  /* 文字色 */
+  --text-color-primary: #262626;
+  --text-color-secondary: #595959;
+  --text-color-placeholder: #8c8c8c;
+  --text-color-disabled: #bfbfbf;
+  --text-color-inverse: #ffffff;
+  
+  /* 阴影 */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+  
+  /* 间距 */
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  
+  /* 圆角 */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  
+  /* 字体 */
+  --font-size-xs: 12px;
+  --font-size-sm: 13px;
+  --font-size-base: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* 高度 */
+  --header-height: 64px;
+  --sidebar-width: 200px;
+  --sidebar-collapsed-width: 64px;
+  --footer-height: 48px;
+  --action-bar-height: 56px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  color: var(--text-color-primary);
+  background-color: var(--bg-color-page);
+  transition: color 0.3s, background-color 0.3s;
+  line-height: 1.5;
+  font-family: 
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    'PingFang SC',
+    'Hiragino Sans GB',
+    'Microsoft YaHei',
+    'Helvetica Neue',
+    Helvetica,
+    Arial,
+    sans-serif;
+  font-size: var(--font-size-base);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 通用卡片样式 */
+.card {
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color-light);
+  overflow: hidden;
+}
+
+/* 通用按钮样式 */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  outline: none;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: var(--color-white);
+  border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-color-light);
+  border-color: var(--primary-color-light);
+}
+
+.btn-default {
+  background-color: var(--color-white);
+  color: var(--text-color-primary);
+  border-color: var(--border-color);
+}
+
+.btn-default:hover {
+  background-color: var(--bg-color-hover);
+  border-color: var(--border-color-dark);
+}
+
+/* 通用表格样式 */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--color-white);
+}
+
+.table th,
+.table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color-light);
+}
+
+.table th {
+  background-color: var(--color-gray-1);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-color-primary);
+}
+
+/* 通用表单样式 */
+.form-item {
+  margin-bottom: var(--spacing-md);
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: var(--font-weight-medium);
+  color: var(--text-color-primary);
+}
+
+.form-control {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-base);
+  background-color: var(--color-white);
+  color: var(--text-color-primary);
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+/* 通用布局样式 */
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.gap-16 {
+  gap: var(--spacing-md);
+}
+
+.p-20 {
+  padding: var(--spacing-xl);
+}
+
+.m-b-20 {
+  margin-bottom: var(--spacing-xl);
+}
+
+.w-full {
+  width: 100%;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}

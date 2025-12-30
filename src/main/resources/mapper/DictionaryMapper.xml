@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.oracle01.mapper.DictionaryMapper">
+
+    <resultMap id="BaseResultMap" type="org.example.oracle01.model.Dictionary">
+        <id column="DICT_ID" property="dictId" jdbcType="NUMERIC"/>
+        <result column="DICT_TYPE" property="dictType" jdbcType="VARCHAR"/>
+        <result column="DICT_CODE" property="dictCode" jdbcType="VARCHAR"/>
+        <result column="DICT_VALUE" property="dictValue" jdbcType="VARCHAR"/>
+        <result column="DICT_DESC" property="dictDesc" jdbcType="VARCHAR"/>
+        <result column="SORT_ORDER" property="sortOrder" jdbcType="NUMERIC"/>
+        <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="IS_DELETED" property="isDeleted" jdbcType="CHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        DICT_ID, DICT_TYPE, DICT_CODE, DICT_VALUE, DICT_DESC, SORT_ORDER, CREATE_TIME, IS_DELETED
+    </sql>
+
+    <select id="selectDictionaryList" parameterType="map" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM TB_DICTIONARY
+        WHERE IS_DELETED = 'N'
+        <if test="params.dictType != null and params.dictType != ''">
+            AND DICT_TYPE = #{params.dictType}
+        </if>
+        <if test="params.dictCode != null and params.dictCode != ''">
+            AND DICT_CODE = #{params.dictCode}
+        </if>
+        ORDER BY SORT_ORDER ASC, CREATE_TIME DESC
+        <if test="params.page != null and params.size != null">
+            OFFSET #{params.page} ROWS
+            FETCH NEXT #{params.size} ROWS ONLY
+        </if>
+    </select>
+
+    <select id="selectDictionaryById" parameterType="long" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM TB_DICTIONARY
+        WHERE DICT_ID = #{id} AND IS_DELETED = 'N'
+    </select>
+
+    <select id="selectDictionaryByType" parameterType="string" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM TB_DICTIONARY
+        WHERE DICT_TYPE = #{type} AND IS_DELETED = 'N'
+        ORDER BY SORT_ORDER ASC
+    </select>
+
+    <insert id="insertDictionary" parameterType="org.example.oracle01.model.Dictionary">
+        INSERT INTO TB_DICTIONARY (
+            DICT_ID, DICT_TYPE, DICT_CODE, DICT_VALUE, DICT_DESC, 
+            SORT_ORDER, CREATE_TIME, IS_DELETED
+        ) VALUES (
+            SEQ_DICT_ID.NEXTVAL, #{dictType}, #{dictCode}, #{dictValue}, 
+            #{dictDesc}, #{sortOrder}, SYSDATE, 'N'
+        )
+    </insert>
+
+    <update id="updateDictionary" parameterType="org.example.oracle01.model.Dictionary">
+        UPDATE TB_DICTIONARY
+        <set>
+            <if test="dictType != null">DICT_TYPE = #{dictType},</if>
+            <if test="dictCode != null">DICT_CODE = #{dictCode},</if>
+            <if test="dictValue != null">DICT_VALUE = #{dictValue},</if>
+            <if test="dictDesc != null">DICT_DESC = #{dictDesc},</if>
+            <if test="sortOrder != null">SORT_ORDER = #{sortOrder},</if>
+        </set>
+        WHERE DICT_ID = #{dictId} AND IS_DELETED = 'N'
+    </update>
+
+    <update id="deleteDictionary" parameterType="long">
+        UPDATE TB_DICTIONARY
+        SET IS_DELETED = 'Y'
+        WHERE DICT_ID = #{id}
+    </update>
+
+    <select id="countDictionary" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM TB_DICTIONARY
+        WHERE IS_DELETED = 'N'
+        <if test="params.dictType != null and params.dictType != ''">
+            AND DICT_TYPE = #{params.dictType}
+        </if>
+        <if test="params.dictCode != null and params.dictCode != ''">
+            AND DICT_CODE = #{params.dictCode}
+        </if>
+    </select>
+</mapper>
