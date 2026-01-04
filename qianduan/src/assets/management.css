@@ -1,0 +1,215 @@
+/* 管理页面公共样式 */
+
+/* 容器 */
+.management-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: var(--bg-color-page);
+}
+
+/* 搜索栏 */
+.search-bar {
+  margin-bottom: var(--spacing-md);
+  border: none;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.search-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.search-form .el-form-item {
+  margin-right: 0;
+  margin-bottom: 0;
+}
+
+.demo-form-inline .el-form-item {
+  margin-right: var(--spacing-sm);
+}
+
+/* 操作栏 */
+.operation-bar {
+  margin-bottom: var(--spacing-md);
+  border: none;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.operation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.operation-left,
+.operation-right {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+/* 表格容器 */
+.table-container {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.data-table {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+}
+
+/* 操作按钮 */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: nowrap;
+}
+
+.action-buttons .el-button {
+  margin: 0;
+  padding: 6px 10px;
+  font-size: var(--font-size-sm);
+  min-width: 50px;
+}
+
+/* 分页 */
+.pagination-wrapper {
+  padding: var(--spacing-md);
+  background-color: var(--color-white);
+  border-top: 1px solid var(--border-color-light);
+  display: flex;
+  justify-content: center;
+}
+
+/* 对话框底部 */
+.dialog-footer {
+  text-align: right;
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid var(--border-color-light);
+  margin: 0 calc(-1 * var(--spacing-md)) calc(-1 * var(--spacing-md)) calc(-1 * var(--spacing-md));
+  padding: var(--spacing-sm) var(--spacing-md);
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+}
+
+/* 表格样式 */
+.el-table th {
+  background-color: var(--color-gray-1);
+  color: var(--text-color-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.el-table .el-table__cell {
+  padding: 12px 0;
+}
+
+.el-card {
+  overflow: visible;
+  border: none;
+}
+
+/* 统计卡片 */
+.statistics-row {
+  margin-bottom: var(--spacing-md);
+}
+
+.statistics-card {
+  border-radius: var(--radius-md);
+  border: none;
+  box-shadow: var(--shadow-sm);
+  background: var(--color-white);
+}
+
+.statistics-item {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-md);
+}
+
+.statistics-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: var(--spacing-md);
+  font-size: 24px;
+}
+
+.statistics-content {
+  flex: 1;
+}
+
+.statistics-value {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-color-primary);
+  margin-bottom: 4px;
+}
+
+.statistics-label {
+  font-size: var(--font-size-sm);
+  color: var(--text-color-secondary);
+}
+
+/* Tab样式 */
+.tabs {
+  height: 100%;
+}
+
+.tab-content {
+  margin-top: var(--spacing-md);
+}
+
+/* 内容区块 */
+.evaluation-content,
+.complaint-content {
+  padding: var(--spacing-sm);
+  background-color: var(--color-gray-2);
+  border-radius: var(--radius-sm);
+  border-left: 4px solid var(--primary-color);
+}
+
+.complaint-content {
+  border-left-color: var(--error-color);
+  min-height: 50px;
+}
+
+/* 图表卡片 */
+.chart-card {
+  border: none;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  background: var(--color-white);
+}
+
+/* 金额颜色 */
+.price-red {
+  color: #f56c6c;
+  font-weight: bold;
+}
+
+.price-green {
+  color: #67c23a;
+  font-weight: bold;
+}
+
+.price-blue {
+  color: #409eff;
+  font-weight: bold;
+}
