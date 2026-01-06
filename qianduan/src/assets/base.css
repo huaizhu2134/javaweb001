@@ -1,47 +1,47 @@
 /* 企业级管理系统配色方案 */
 :root {
   /* 主色调 - 企业蓝 */
-  --primary-color: #1890ff;
-  --primary-color-light: #40a9ff;
-  --primary-color-dark: #096dd9;
+  --primary-color: #409eff;
+  --primary-color-light: #66b1ff;
+  --primary-color-dark: #34495e;
   
   /* 辅助色彩 */
-  --secondary-color: #52c41a;
-  --warning-color: #faad14;
-  --error-color: #f5222d;
-  --info-color: #177ddc;
+  --secondary-color: #67c23a;
+  --warning-color: #e6a23c;
+  --error-color: #f56c6c;
+  --info-color: #909399;
   
   /* 灰度色彩 */
   --color-white: #ffffff;
   --color-black: #000000;
   --color-gray-1: #fafafa;
-  --color-gray-2: #f5f5f5;
-  --color-gray-3: #f0f0f0;
-  --color-gray-4: #d9d9d9;
-  --color-gray-5: #bfbfbf;
-  --color-gray-6: #8c8c8c;
-  --color-gray-7: #595959;
-  --color-gray-8: #262626;
-  --color-gray-9: #1f1f1f;
+  --color-gray-2: #f5f7fa;
+  --color-gray-3: #ededed;
+  --color-gray-4: #dcdfe6;
+  --color-gray-5: #c0c4cc;
+  --color-gray-6: #a8a8a8;
+  --color-gray-7: #909399;
+  --color-gray-8: #606266;
+  --color-gray-9: #303133;
   
   /* 背景色 */
-  --bg-color-page: #f0f2f5;
+  --bg-color-page: #f5f7fa;
   --bg-color-container: #ffffff;
-  --bg-color-header: linear-gradient(135deg, #1890ff, #096dd9);
-  --bg-color-sidebar: #001529;
-  --bg-color-sidebar-item: #000c17;
-  --bg-color-hover: #f5f5f5;
+  --bg-color-header: linear-gradient(135deg, #409eff, #1890ff);
+  --bg-color-sidebar: #1d3557;
+  --bg-color-sidebar-item: #14213d;
+  --bg-color-hover: #ecf5ff;
   
   /* 边框色 */
-  --border-color: #d9d9d9;
-  --border-color-light: #e8e8e8;
-  --border-color-dark: #bfbfbf;
+  --border-color: #dcdfe6;
+  --border-color-light: #ebeef5;
+  --border-color-dark: #c0c4cc;
   
   /* 文字色 */
-  --text-color-primary: #262626;
-  --text-color-secondary: #595959;
-  --text-color-placeholder: #8c8c8c;
-  --text-color-disabled: #bfbfbf;
+  --text-color-primary: #303133;
+  --text-color-secondary: #606266;
+  --text-color-placeholder: #c0c4cc;
+  --text-color-disabled: #c0c4cc;
   --text-color-inverse: #ffffff;
   
   /* 阴影 */
@@ -74,7 +74,7 @@
   
   /* 高度 */
   --header-height: 64px;
-  --sidebar-width: 200px;
+  --sidebar-width: 220px;
   --sidebar-collapsed-width: 64px;
   --footer-height: 48px;
   --action-bar-height: 56px;

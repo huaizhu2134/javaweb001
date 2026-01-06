@@ -153,6 +153,7 @@ const handleCommand = async (command) => {
   display: flex;
   flex-direction: column;
   background-color: var(--bg-color-page);
+  font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
 .admin-container {
@@ -233,6 +234,7 @@ const handleCommand = async (command) => {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
 }
 
 .admin-aside.collapsed {
@@ -254,20 +256,24 @@ const handleCommand = async (command) => {
 
 .sidebar-menu :deep(.el-menu-item) {
   margin: 4px 8px;
-  border-radius: 4px;
+  border-radius: 8px;
   height: 44px;
   line-height: 44px;
   color: rgba(255, 255, 255, 0.7);
+  margin: 6px 12px;
+  transition: all 0.3s;
 }
 
 .sidebar-menu :deep(.el-menu-item.is-active) {
-  background-color: rgba(255, 255, 255, 0.1);
+  background: linear-gradient(90deg, rgba(64, 158, 255, 0.1), rgba(64, 158, 255, 0.05));
   color: #fff;
   border-left: 3px solid var(--primary-color);
+  box-shadow: inset 2px 0 4px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar-menu :deep(.el-menu-item:hover) {
   background-color: rgba(255, 255, 255, 0.2);
+  transform: translateX(3px);
 }
 
 .sidebar-toggle {
@@ -303,6 +309,7 @@ const handleCommand = async (command) => {
   box-shadow: var(--shadow-md);
   min-height: calc(100% - 40px);
   height: 100%;
+  transition: all 0.3s ease;
 }
 
 /* 滚动条样式 */

@@ -465,19 +465,23 @@ onMounted(() => {
 
 <style scoped>
 .management-container {
-  padding: 12px;
-  background: #f5f7fa;
+  padding: var(--spacing-md);
+  background: var(--bg-color-page);
+  min-height: 100%;
 }
 
 .search-bar,
 .operation-bar {
-  margin-bottom: 12px;
+  margin-bottom: var(--spacing-md);
   border: none;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  background-color: var(--color-white);
+  padding: var(--spacing-md);
 }
 
 .search-form :deep(.el-form-item) {
-  margin-bottom: 8px;
+  margin-bottom: 0;
 }
 
 .operation-header {
@@ -493,24 +497,34 @@ onMounted(() => {
 }
 
 .table-container {
-  height: calc(100vh - 280px);
-  background: #fff;
-  padding: 8px;
-  border-radius: 8px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  height: calc(100vh - 300px);
+  background: var(--color-white);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color-light);
 }
 
 .data-table :deep(.el-table__header-wrapper) {
-  border-radius: 6px 6px 0 0;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.data-table :deep(.el-table__body-wrapper) {
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
 }
 
 .action-buttons .el-button {
   margin: 0 4px;
+  transition: all 0.3s;
 }
 
 .pagination-wrapper {
   display: flex;
   justify-content: center;
-  padding: 12px 0;
+  padding: var(--spacing-md) 0;
+  background-color: var(--color-white);
+  border-top: 1px solid var(--border-color-light);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  margin-top: var(--spacing-sm);
 }
 </style>
