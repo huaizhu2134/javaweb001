@@ -38,7 +38,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="订单状态">
-          <el-select v-model="searchForm.orderStatus" placeholder="请选择" clearable style="width: 150px;">
+          <el-select v-model="searchForm.status" placeholder="请选择" clearable style="width: 150px;">
             <el-option label="全部" value="" />
             <el-option label="待支付" value="待支付" />
             <el-option label="已支付" value="已支付" />
@@ -379,7 +379,7 @@ const searchForm = reactive({
   customerName: '',
   staffName: '',
   gameType: '',
-  orderStatus: '',
+  status: '',
   createTimeRange: []
 })
 
@@ -436,6 +436,11 @@ const fetchData = async () => {
       ...searchForm,
       page: page.current,
       size: page.size
+    }
+    // 重命名orderStatus为status以匹配后端API
+    if (searchForm.status !== undefined) {
+      params.status = searchForm.status
+      delete params.orderStatus
     }
     if (searchForm.createTimeRange && searchForm.createTimeRange.length === 2) {
       params.startTime = searchForm.createTimeRange[0]
@@ -529,8 +534,7 @@ const handleCreateSubmit = () => {
         
         const orderData = {
           ...orderForm,
-          totalAmount: totalAmount,
-          orderStatus: '待支付'
+          totalAmount: totalAmount
         }
         
         await addOrder(orderData)

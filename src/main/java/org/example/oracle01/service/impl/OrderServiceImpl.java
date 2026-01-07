@@ -54,6 +54,24 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public Result<String> addOrder(Order order) {
         try {
+            // 自动生成订单号
+            if (order.getOrderNo() == null || order.getOrderNo().isEmpty()) {
+                order.setOrderNo(generateOrderNo());
+            }
+
+            // 计算平台佣金和陪玩收入
+            if (order.getTotalAmount() != null) {
+                // 假设平台佣金比例为10%
+                double commissionRate = 0.1;
+                order.setPlatformCommission(order.getTotalAmount().multiply(new java.math.BigDecimal(commissionRate)));
+                order.setStaffIncome(order.getTotalAmount().subtract(order.getPlatformCommission()));
+            }
+
+            // 设置订单状态为"待支付"
+            if (order.getOrderStatus() == null || order.getOrderStatus().isEmpty()) {
+                order.setOrderStatus("待支付");
+            }
+
             int result = orderMapper.insertOrder(order);
             if (result > 0) {
                 return Result.success("新增订单成功");
@@ -63,6 +81,15 @@ public class OrderServiceImpl implements OrderService {
         } catch (Exception e) {
             return Result.error("新增订单失败：" + e.getMessage());
         }
+    }
+
+    // 生成订单号的方法
+    private String generateOrderNo() {
+        // 生成格式为：日期+时间+6位随机数
+        java.time.LocalDateTime now = java.time.LocalDateTime.now();
+        String dateStr = now.format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+        int randomNum = (int) (Math.random() * 900000) + 100000; // 6位随机数
+        return "ORD" + dateStr + randomNum;
     }
 
     @Override

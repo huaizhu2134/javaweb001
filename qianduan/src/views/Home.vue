@@ -26,7 +26,6 @@
               <ul class="feature-list">
                 <li>评价投诉管理：评价管理、投诉处理等</li>
                 <li>财务管理：提现管理、收入统计等</li>
-                <li>系统管理：管理员、角色、数据字典等</li>
               </ul>
             </el-col>
           </el-row>
@@ -97,8 +96,8 @@
           <span class="title">快捷操作</span>
         </div>
       </template>
-      <el-row :gutter="20">
-        <el-col :span="4" v-for="action in quickActions" :key="action.name">
+      <el-row :gutter="20" justify="center">
+        <el-col :span="5" v-for="action in quickActions" :key="action.name">
           <div class="action-item" @click="goToPage(action.path)">
             <div class="action-icon">
               <el-icon :size="24" :class="action.iconClass"><component :is="action.icon" /></el-icon>
@@ -157,8 +156,7 @@ const quickActions = [
   { name: '客户管理', path: '/customer', icon: UserFilled, iconClass: 'customer-icon' },
   { name: '创建订单', path: '/order', icon: Plus, iconClass: 'add-icon' },
   { name: '订单查询', path: '/order', icon: Search, iconClass: 'search-icon' },
-  { name: '财务管理', path: '/finance', icon: Money, iconClass: 'finance-icon' },
-  { name: '系统设置', path: '/system', icon: Setting, iconClass: 'setting-icon' }
+  { name: '财务管理', path: '/finance', icon: Money, iconClass: 'finance-icon' }
 ]
 
 const goToPage = (path) => {

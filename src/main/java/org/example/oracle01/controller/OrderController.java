@@ -26,7 +26,10 @@ public class OrderController {
             @RequestParam(value = "orderNo", required = false) String orderNo,
             @RequestParam(value = "status", required = false) String status,
             @RequestParam(value = "customerName", required = false) String customerName,
-            @RequestParam(value = "staffName", required = false) String staffName) {
+            @RequestParam(value = "staffName", required = false) String staffName,
+            @RequestParam(value = "gameType", required = false) String gameType,
+            @RequestParam(value = "startTime", required = false) String startTime,
+            @RequestParam(value = "endTime", required = false) String endTime) {
 
         Map<String, Object> params = new HashMap<>();
         params.put("page", (page - 1) * size);
@@ -35,6 +38,9 @@ public class OrderController {
         params.put("status", status);
         params.put("customerName", customerName);
         params.put("staffName", staffName);
+        params.put("gameType", gameType);
+        params.put("startTime", startTime);
+        params.put("endTime", endTime);
 
         return orderService.getOrderList(params);
     }

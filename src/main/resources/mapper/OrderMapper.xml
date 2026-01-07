@@ -54,14 +54,23 @@
         <if test="params.staffId != null">
             AND o.STAFF_ID = #{params.staffId}
         </if>
-        <if test="params.orderStatus != null and params.orderStatus != ''">
-            AND o.ORDER_STATUS = #{params.orderStatus}
+        <if test="params.status != null and params.status != ''">
+            AND o.ORDER_STATUS = #{params.status}
         </if>
         <if test="params.customerName != null and params.customerName != ''">
             AND c.NICKNAME LIKE CONCAT('%', #{params.customerName}, '%')
         </if>
         <if test="params.staffName != null and params.staffName != ''">
             AND s.STAFF_NAME LIKE CONCAT('%', #{params.staffName}, '%')
+        </if>
+        <if test="params.gameType != null and params.gameType != ''">
+            AND o.GAME_TYPE = #{params.gameType}
+        </if>
+        <if test="params.startTime != null and params.startTime != ''">
+            AND DATE(o.CREATE_TIME) >= DATE(#{params.startTime})
+        </if>
+        <if test="params.endTime != null and params.endTime != ''">
+            AND DATE(o.CREATE_TIME) &lt;= DATE(#{params.endTime})
         </if>
         ORDER BY o.CREATE_TIME DESC
         <if test="params.page != null and params.size != null">
@@ -108,7 +117,7 @@
             <if test="endTime != null">END_TIME = #{endTime},</if>
             <if test="customerComment != null">CUSTOMER_COMMENT = #{customerComment},</if>
             <if test="staffComment != null">STAFF_COMMENT = #{staffComment},</if>
-            UPDATE_TIME = NOW(),
+            <if test="updateTime != null">UPDATE_TIME = #{updateTime},</if>
         </set>
         WHERE ORDER_ID = #{orderId} AND IS_DELETED = 'N'
     </update>
@@ -122,18 +131,29 @@
     <select id="countOrder" parameterType="map" resultType="int">
         SELECT COUNT(*)
         FROM TB_ORDER
-        WHERE IS_DELETED = 'N'
+        LEFT JOIN TB_CUSTOMER c ON TB_ORDER.CUSTOMER_ID = c.CUSTOMER_ID
+        LEFT JOIN TB_STAFF s ON TB_ORDER.STAFF_ID = s.STAFF_ID
+        WHERE TB_ORDER.IS_DELETED = 'N'
         <if test="params.orderNo != null and params.orderNo != ''">
-            AND ORDER_NO LIKE CONCAT('%', #{params.orderNo}, '%')
+            AND TB_ORDER.ORDER_NO LIKE CONCAT('%', #{params.orderNo}, '%')
         </if>
-        <if test="params.customerId != null">
-            AND CUSTOMER_ID = #{params.customerId}
+        <if test="params.customerName != null and params.customerName != ''">
+            AND c.NICKNAME LIKE CONCAT('%', #{params.customerName}, '%')
         </if>
-        <if test="params.staffId != null">
-            AND STAFF_ID = #{params.staffId}
+        <if test="params.staffName != null and params.staffName != ''">
+            AND s.STAFF_NAME LIKE CONCAT('%', #{params.staffName}, '%')
         </if>
-        <if test="params.orderStatus != null and params.orderStatus != ''">
-            AND ORDER_STATUS = #{params.orderStatus}
+        <if test="params.status != null and params.status != ''">
+            AND TB_ORDER.ORDER_STATUS = #{params.status}
+        </if>
+        <if test="params.gameType != null and params.gameType != ''">
+            AND TB_ORDER.GAME_TYPE = #{params.gameType}
+        </if>
+        <if test="params.startTime != null and params.startTime != ''">
+            AND DATE(TB_ORDER.CREATE_TIME) >= DATE(#{params.startTime})
+        </if>
+        <if test="params.endTime != null and params.endTime != ''">
+            AND DATE(TB_ORDER.CREATE_TIME) &lt;= DATE(#{params.endTime})
         </if>
     </select>
 

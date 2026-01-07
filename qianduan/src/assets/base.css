@@ -1,72 +1,72 @@
-/* 企业级管理系统配色方案 */
+/* 企业级管理系统配色方案 - 简洁版 */
 :root {
-  /* 主色调 - 企业蓝 */
-  --primary-color: #409eff;
-  --primary-color-light: #66b1ff;
-  --primary-color-dark: #34495e;
+  /* 主色调 - 简洁蓝灰 */
+  --primary-color: #3a5f7a;
+  --primary-color-light: #5d7b88;
+  --primary-color-dark: #2a4259;
   
-  /* 辅助色彩 */
-  --secondary-color: #67c23a;
-  --warning-color: #e6a23c;
-  --error-color: #f56c6c;
-  --info-color: #909399;
+  /* 辅助色彩 - 简洁实用 */
+  --secondary-color: #5a7d62;
+  --warning-color: #a67752;
+  --error-color: #a65252;
+  --info-color: #6c7d8a;
   
   /* 新增色彩变体 */
-  --primary-color-1: #ecf5ff;
-  --primary-color-2: #d2eafb;
-  --primary-color-3: #a3cfff;
-  --primary-color-4: #83bbff;
-  --primary-color-5: #66b1ff;
-  --primary-color-6: #409eff;
-  --primary-color-7: #3a8ee6;
-  --primary-color-8: #337ecc;
-  --primary-color-9: #2d6ebc;
-  --primary-color-10: #265ba3;
+  --primary-color-1: #f0f4f7;
+  --primary-color-2: #e0e8ee;
+  --primary-color-3: #c5d4e0;
+  --primary-color-4: #a9c0d2;
+  --primary-color-5: #8eadc3;
+  --primary-color-6: #7499b5;
+  --primary-color-7: #5d7b88;
+  --primary-color-8: #4c6470;
+  --primary-color-9: #3a4c59;
+  --primary-color-10: #2a3842;
   
   /* 现代化色彩系统 */
-  --success-color: #13ce66;
-  --success-color-light: #e6f9ee;
-  --warning-color-light: #fdf6ec;
-  --error-color-light: #fef0f0;
-  --info-color-light: #f4f4f5;
+  --success-color: #5a7d62;
+  --success-color-light: #edf3ee;
+  --warning-color-light: #f9f5ee;
+  --error-color-light: #f9eeef;
+  --info-color-light: #f2f4f5;
   
   /* 灰度色彩 */
   --color-white: #ffffff;
   --color-black: #000000;
   --color-gray-1: #fafafa;
   --color-gray-2: #f5f7fa;
-  --color-gray-3: #ededed;
-  --color-gray-4: #dcdfe6;
-  --color-gray-5: #c0c4cc;
-  --color-gray-6: #a8a8a8;
-  --color-gray-7: #909399;
-  --color-gray-8: #606266;
-  --color-gray-9: #303133;
+  --color-gray-3: #eeeff2;
+  --color-gray-4: #e2e5e9;
+  --color-gray-5: #c5c9ce;
+  --color-gray-6: #a8adb3;
+  --color-gray-7: #8a9097;
+  --color-gray-8: #6c737c;
+  --color-gray-9: #4f5660;
   
   /* 背景色 */
-  --bg-color-page: #f0f2f5;
+  --bg-color-page: #f8fafc;
   --bg-color-container: #ffffff;
-  --bg-color-header: linear-gradient(135deg, #667eea, #764ba2);
-  --bg-color-sidebar: linear-gradient(to bottom, #2c3e50, #34495e);
-  --bg-color-sidebar-item: #14213d;
-  --bg-color-hover: #ecf5ff;
+  --bg-color-header: #3a5f7a;
+  --bg-color-sidebar: #2a4259;
+  --bg-color-sidebar-item: #3a5f7a;
+  --bg-color-hover: #eef4f9;
   
   /* 边框色 */
-  --border-color: #dcdfe6;
-  --border-color-light: #ebeef5;
-  --border-color-dark: #c0c4cc;
+  --border-color: #e2e5e9;
+  --border-color-light: #ebeef2;
+  --border-color-dark: #c5c9ce;
   
   /* 文字色 */
-  --text-color-primary: #303133;
-  --text-color-secondary: #606266;
-  --text-color-placeholder: #c0c4cc;
-  --text-color-disabled: #c0c4cc;
+  --text-color-primary: #2d3748;
+  --text-color-secondary: #4a5568;
+  --text-color-placeholder: #a0aec0;
+  --text-color-disabled: #cbd5e0;
   --text-color-inverse: #ffffff;
   
   /* 阴影 */
-  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.12);
   
   /* 间距 */
   --spacing-xs: 8px;
@@ -78,7 +78,7 @@
   /* 圆角 */
   --radius-sm: 4px;
   --radius-md: 6px;
-  --radius-lg: 12px;
+  --radius-lg: 8px;
   --radius-full: 50px;
   
   /* 字体 */
