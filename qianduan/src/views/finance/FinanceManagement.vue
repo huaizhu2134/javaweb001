@@ -1,6 +1,6 @@
 <template>
   <div class="management-container">
-    <el-tabs v-model="activeTab" class="tabs">
+    <el-tabs v-model="activeTab" class="tabs" @tab-change="handleTabChange">
       <!-- 财务统计标签页 -->
       <el-tab-pane label="财务统计" name="statistics">
         <div class="tab-content">
@@ -50,7 +50,7 @@
                 <template #header>
                   <span>收入趋势</span>
                 </template>
-                <div class="chart-container" id="incomeChart" style="height: 300px;"></div>
+                <div ref="incomeChart" class="chart-container" style="height: 300px;"></div>
               </el-card>
             </el-col>
             <el-col :span="12">
@@ -58,7 +58,7 @@
                 <template #header>
                   <span>订单状态分布</span>
                 </template>
-                <div class="chart-container" id="orderStatusChart" style="height: 300px;"></div>
+                <div ref="orderStatusChart" class="chart-container" style="height: 300px;"></div>
               </el-card>
             </el-col>
           </el-row>
@@ -288,12 +288,14 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
-import { getFinanceSummary, getWithdrawList, getIncomeList, applyWithdraw, approveWithdraw } from '@/api/finance'
-import request from '@/utils/request'
+import { ref, reactive, onMounted, nextTick } from 'vue'
+import { getFinanceSummary, getWithdrawList, getIncomeList, applyWithdraw, approveWithdraw, getIncomeTrend, getOrderStatusDistribution } from '@/api/finance'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { getStatusType } from '@/composables/useTable'
 import StatusTag from '@/components/StatusTag.vue'
+
+// 引入 ECharts
+import * as echarts from 'echarts'
+import { onUnmounted } from 'vue'
 
 // 响应式数据
 const activeTab = ref('statistics')
@@ -304,6 +306,16 @@ const incomeList = ref([])
 const withdrawDetailVisible = ref(false)
 const currentWithdraw = ref({})
 const multipleWithdrawSelection = ref([])
+
+// 图表相关
+const incomeChart = ref(null)
+const orderStatusChart = ref(null)
+let incomeEchart = null
+let orderStatusEchart = null
+
+// 图表数据
+const incomeTrendData = ref([])
+const orderStatusData = ref([])
 
 // 统计数据
 const statistics = reactive({
@@ -571,10 +583,193 @@ const handleViewWithdraw = (row) => {
   withdrawDetailVisible.value = true
 }
 
+// 获取收入趋势数据
+const fetchIncomeTrend = async () => {
+  try {
+    const response = await getIncomeTrend({ days: 7 })
+    if (response.code === 200) {
+      incomeTrendData.value = response.data || []
+      nextTick(() => {
+        renderIncomeChart()
+      })
+    }
+  } catch (error) {
+    console.error('获取收入趋势失败:', error)
+  }
+}
+
+// 获取订单状态分布数据
+const fetchOrderStatusDistribution = async () => {
+  try {
+    const response = await getOrderStatusDistribution()
+    if (response.code === 200) {
+      orderStatusData.value = response.data || []
+      nextTick(() => {
+        renderOrderStatusChart()
+      })
+    }
+  } catch (error) {
+    console.error('获取订单状态分布失败:', error)
+  }
+}
+
+// 渲染收入趋势图表
+const renderIncomeChart = () => {
+  if (!incomeChart.value) return
+  
+  if (incomeEchart) {
+    incomeEchart.dispose()
+  }
+  
+  incomeEchart = echarts.init(incomeChart.value)
+  
+  const dates = incomeTrendData.value.map(item => item.date)
+  const incomes = incomeTrendData.value.map(item => item.income)
+  
+  const option = {
+    title: {
+      text: '收入趋势',
+      left: 'center',
+      textStyle: {
+        fontSize: 16,
+        fontWeight: 'bold'
+      }
+    },
+    tooltip: {
+      trigger: 'axis',
+      formatter: '{b}: ¥{c}'
+    },
+    xAxis: {
+      type: 'category',
+      data: dates,
+      axisLabel: {
+        interval: 0,
+        rotate: 45
+      }
+    },
+    yAxis: {
+      type: 'value',
+      axisLabel: {
+        formatter: '¥{value}'
+      }
+    },
+    series: [{
+      data: incomes,
+      type: 'line',
+      smooth: true,
+      itemStyle: {
+        color: '#5470c6'
+      },
+      areaStyle: {
+        opacity: 0.2,
+        color: '#5470c6'
+      }
+    }],
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '15%',
+      top: '15%',
+      containLabel: true
+    }
+  }
+  
+  incomeEchart.setOption(option)
+}
+
+// 渲染订单状态分布图表
+const renderOrderStatusChart = () => {
+  if (!orderStatusChart.value) return
+  
+  if (orderStatusEchart) {
+    orderStatusEchart.dispose()
+  }
+  
+  orderStatusEchart = echarts.init(orderStatusChart.value)
+  
+  const statuses = orderStatusData.value.map(item => item.status)
+  const counts = orderStatusData.value.map(item => item.count)
+  
+  const option = {
+    title: {
+      text: '订单状态分布',
+      left: 'center',
+      textStyle: {
+        fontSize: 16,
+        fontWeight: 'bold'
+      }
+    },
+    tooltip: {
+      trigger: 'item',
+      formatter: '{a} <br/>{b}: {c} ({d}%)'
+    },
+    legend: {
+      orient: 'horizontal',
+      bottom: 'bottom',
+      type: 'scroll'
+    },
+    series: {
+      name: '订单状态',
+      type: 'pie',
+      radius: ['40%', '70%'],
+      avoidLabelOverlap: false,
+      itemStyle: {
+        borderRadius: 10,
+        borderColor: '#fff',
+        borderWidth: 2
+      },
+      label: {
+        show: true,
+        formatter: '{b}: {d}%'
+      },
+      emphasis: {
+        label: {
+          show: true,
+          fontSize: '14',
+          fontWeight: 'bold'
+        }
+      },
+      data: orderStatusData.value.map(item => ({
+        value: item.count,
+        name: item.status
+      }))
+    }
+  }
+  
+  orderStatusEchart.setOption(option)
+}
+
+// 当标签页切换到统计时，加载图表数据
+const handleTabChange = (tabName) => {
+  if (tabName === 'statistics') {
+    nextTick(() => {
+      fetchIncomeTrend()
+      fetchOrderStatusDistribution()
+    })
+  }
+}
+
 onMounted(() => {
   fetchStatistics()
   fetchWithdrawData()
   fetchIncomeData()
+  
+  // 在下一个tick后加载图表数据
+  nextTick(() => {
+    fetchIncomeTrend()
+    fetchOrderStatusDistribution()
+  })
+})
+onUnmounted(() => {
+  // 销毁图表实例
+  if (incomeEchart) {
+    incomeEchart.dispose()
+    incomeEchart = null
+  }
+  if (orderStatusEchart) {
+    orderStatusEchart.dispose()
+    orderStatusEchart = null
+  }
 })
 </script>
 

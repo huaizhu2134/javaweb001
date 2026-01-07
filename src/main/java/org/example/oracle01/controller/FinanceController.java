@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.Calendar;
 
 @RestController
 @RequestMapping("/api/finance")
@@ -259,6 +260,77 @@ public class FinanceController {
             return Result.success(pageResult);
         } catch (Exception e) {
             return Result.error("获取收入明细失败：" + e.getMessage());
+        }
+    }
+
+    // 获取收入趋势数据
+    @GetMapping("/income/trend")
+    public Result<List<Map<String, Object>>> getIncomeTrend(
+            @RequestParam(value = "days", defaultValue = "7") Integer days) {
+        try {
+            // 获取最近N天的每日收入统计
+            String sql = "SELECT " +
+                    "    DATE(CREATE_TIME) AS date, " +
+                    "    IFNULL(SUM(TOTAL_AMOUNT), 0) AS income " +
+                    "FROM TB_ORDER " +
+                    "WHERE ORDER_STATUS = '已完成' " +
+                    "    AND DATE(CREATE_TIME) >= DATE_SUB(CURDATE(), INTERVAL ? DAY) " +
+                    "GROUP BY DATE(CREATE_TIME) " +
+                    "ORDER BY DATE(CREATE_TIME) ASC";
+
+            List<Map<String, Object>> result = jdbcTemplate.queryForList(sql, days);
+
+            // 确保日期连续，如果没有数据则补0
+            List<Map<String, Object>> trendData = new ArrayList<>();
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DAY_OF_MONTH, -days + 1); // 从N天前开始
+
+            for (int i = 0; i < days; i++) {
+                String dateStr = new java.sql.Date(calendar.getTimeInMillis()).toString();
+                Map<String, Object> dailyData = null;
+
+                for (Map<String, Object> record : result) {
+                    if (dateStr.equals(record.get("date").toString())) {
+                        dailyData = record;
+                        break;
+                    }
+                }
+
+                if (dailyData != null) {
+                    trendData.add(dailyData);
+                } else {
+                    Map<String, Object> emptyData = new HashMap<>();
+                    emptyData.put("date", dateStr);
+                    emptyData.put("income", 0);
+                    trendData.add(emptyData);
+                }
+
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+            }
+
+            return Result.success(trendData);
+        } catch (Exception e) {
+            return Result.error("获取收入趋势失败：" + e.getMessage());
+        }
+    }
+
+    // 获取订单状态分布数据
+    @GetMapping("/order/status")
+    public Result<List<Map<String, Object>>> getOrderStatusDistribution() {
+        try {
+            // 统计订单状态分布
+            String sql = "SELECT " +
+                    "    ORDER_STATUS AS status, " +
+                    "    COUNT(*) AS count " +
+                    "FROM TB_ORDER " +
+                    "WHERE IS_DELETED = 'N' " +
+                    "GROUP BY ORDER_STATUS " +
+                    "ORDER BY COUNT(*) DESC";
+
+            List<Map<String, Object>> result = jdbcTemplate.queryForList(sql);
+            return Result.success(result);
+        } catch (Exception e) {
+            return Result.error("获取订单状态分布失败：" + e.getMessage());
         }
     }
 }

@@ -44,3 +44,20 @@ export function getIncomeList(params) {
     params
   })
 }
+
+// 获取收入趋势
+export function getIncomeTrend(params) {
+  return request({
+    url: '/api/finance/income/trend',
+    method: 'get',
+    params
+  })
+}
+
+// 获取订单状态分布
+export function getOrderStatusDistribution() {
+  return request({
+    url: '/api/finance/order/status',
+    method: 'get'
+  })
+}
