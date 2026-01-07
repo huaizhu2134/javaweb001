@@ -3,6 +3,9 @@
 -- 1. 创建表结构
 SOURCE create_tables_mysql.sql;
 
+-- 创建提现表
+SOURCE create_withdraw_table.sql;
+
 -- 2. 插入基础数据
 SOURCE insert_staff_data_mysql.sql;
 SOURCE insert_customer_data_mysql.sql;

@@ -489,7 +489,7 @@ const handleBatchApprove = async () => {
 
     // 批量审核通过
     for (const item of multipleWithdrawSelection.value) {
-      await approveWithdraw({ staffId: item.staffId, status: '已通过' })
+      await approveWithdraw({ withdrawId: item.withdrawId, status: '已通过' })
     }
     ElMessage.success('批量审核成功')
     fetchWithdrawData()
@@ -517,7 +517,7 @@ const handleBatchReject = async () => {
 
     // 批量拒绝
     for (const item of multipleWithdrawSelection.value) {
-      await approveWithdraw({ staffId: item.staffId, status: '已拒绝' })
+      await approveWithdraw({ withdrawId: item.withdrawId, status: '已拒绝' })
     }
     ElMessage.success('批量拒绝成功')
     fetchWithdrawData()
@@ -538,7 +538,7 @@ const handleApproveWithdraw = async (row) => {
       type: 'warning'
     })
 
-    const response = await approveWithdraw({ staffId: row.staffId, status: '已通过' })
+    const response = await approveWithdraw({ withdrawId: row.withdrawId, status: '已通过' })
     if (response.code === 200) {
       ElMessage.success('审核通过')
       fetchWithdrawData()
@@ -562,7 +562,7 @@ const handleRejectWithdraw = async (row) => {
       type: 'warning'
     })
 
-    const response = await approveWithdraw({ staffId: row.staffId, status: '已拒绝' })
+    const response = await approveWithdraw({ withdrawId: row.withdrawId, status: '已拒绝' })
     if (response.code === 200) {
       ElMessage.success('已拒绝')
       fetchWithdrawData()

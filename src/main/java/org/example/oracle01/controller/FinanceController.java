@@ -143,7 +143,7 @@ public class FinanceController {
             }
 
             // 插入提现申请记录
-            String insertSql = "INSERT INTO TB_WITHDRAW (STAFF_ID, AMOUNT, REMARK) VALUES (?, ?, ?)";
+            String insertSql = "INSERT INTO TB_WITHDRAW (STAFF_ID, AMOUNT, REMARK, STATUS) VALUES (?, ?, ?, '待审核')";
             int result = jdbcTemplate.update(insertSql, staffId, amount, remark);
 
             if (result > 0) {
@@ -157,27 +157,37 @@ public class FinanceController {
     }
 
     // 审核提现 - 通过
-    @PostMapping("/withdraw/approve")
+    @PutMapping("/withdraw/approve")
     public Result<String> approveWithdraw(@RequestBody Map<String, Object> params) {
         try {
-            Long staffId = Long.valueOf(params.get("staffId").toString());
+            Long withdrawId = Long.valueOf(params.get("withdrawId").toString());
             String status = params.get("status") != null ? params.get("status").toString() : "已通过";
-
             String approver = params.get("approver") != null ? params.get("approver").toString() : "系统管理员";
 
+            // 先获取提现记录信息
+            String selectSql = "SELECT STAFF_ID, AMOUNT FROM TB_WITHDRAW WHERE WITHDRAW_ID = ? AND STATUS = '待审核'";
+            List<Map<String, Object>> result = jdbcTemplate.queryForList(selectSql, withdrawId);
+
+            if (result.isEmpty()) {
+                return Result.error("未找到待审核的提现申请或申请不存在");
+            }
+
+            Long staffId = Long.valueOf(result.get(0).get("STAFF_ID").toString());
+            BigDecimal amount = new BigDecimal(result.get(0).get("AMOUNT").toString());
+
             // 更新提现申请状态
-            String updateWithdrawSql = "UPDATE TB_WITHDRAW SET STATUS = ?, APPROVE_TIME = NOW(), APPROVER = ? WHERE STAFF_ID = ? AND STATUS = '待审核'";
-            int updated = jdbcTemplate.update(updateWithdrawSql, status, approver, staffId);
+            String updateWithdrawSql = "UPDATE TB_WITHDRAW SET STATUS = ?, APPROVE_TIME = NOW(), APPROVER = ? WHERE WITHDRAW_ID = ?";
+            int updated = jdbcTemplate.update(updateWithdrawSql, status, approver, withdrawId);
 
             if (updated > 0 && "已通过".equals(status)) {
-                // 如果审核通过，从陪玩收入中扣除已批准的提现金额
-                String updateStaffSql = "UPDATE TB_STAFF SET TOTAL_INCOME = TOTAL_INCOME - (SELECT COALESCE(SUM(AMOUNT), 0) FROM TB_WITHDRAW WHERE STAFF_ID = ? AND STATUS = '已通过'), UPDATE_TIME = NOW() WHERE STAFF_ID = ?";
-                jdbcTemplate.update(updateStaffSql, staffId, staffId);
+                // 如果审核通过，从陪玩收入中扣除提现金额
+                String updateStaffSql = "UPDATE TB_STAFF SET TOTAL_INCOME = TOTAL_INCOME - ? WHERE STAFF_ID = ?";
+                jdbcTemplate.update(updateStaffSql, amount, staffId);
                 return Result.success("审核通过，提现成功");
             } else if (updated > 0) {
                 return Result.success("已拒绝提现申请");
             } else {
-                return Result.error("未找到待审核的提现申请或操作失败");
+                return Result.error("操作失败");
             }
         } catch (Exception e) {
             return Result.error("审核失败：" + e.getMessage());
